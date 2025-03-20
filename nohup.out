@@ -1,0 +1,403 @@
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://198.46.226.104:5000
+Press CTRL+C to quit
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 4.49s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.54s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.03s
+119.74.145.167 - - [19/Mar/2025 22:25:24] "GET /crawl?url=https://aisingapore.org HTTP/1.1" 200 -
+119.74.145.167 - - [19/Mar/2025 22:25:24] "GET /favicon.ico HTTP/1.1" 404 -
+119.74.145.167 - - [19/Mar/2025 22:26:38] "POST /crawl?url=https://aisingapore.org HTTP/1.1" 405 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 4.69s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.616s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.33s
+119.74.145.167 - - [19/Mar/2025 22:27:00] "GET /crawl?url=https://aisingapore.org HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://noorhalim.person.bio/... | Status: True | Time: 2.98s
+[SCRAPE].. ◆ https://noorhalim.person.bio/... | Time: 0.134s
+[COMPLETE] ● https://noorhalim.person.bio/... | Status: True | Total: 3.12s
+119.74.145.167 - - [20/Mar/2025 00:01:21] "GET /crawl?url=https://noorhalim.person.bio/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Mar/2025 01:29:11] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:29:11] "GET /favicon.ico HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:30:26] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:30:26] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:30:52] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:30:52] "GET /favicon.ico HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.75s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.429s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 5.18s
+127.0.0.1 - - [20/Mar/2025 01:31:25] "GET /crawl?url=https://sallysbakingaddiction.com HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com/iced-lemon-pound... | Status: True | Time: 4.14s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com/iced-lemon-pound... | Time: 0.433s
+[COMPLETE] ● https://sallysbakingaddiction.com/iced-lemon-pound... | Status: True | Total: 4.58s
+127.0.0.1 - - [20/Mar/2025 01:32:38] "GET /crawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/ HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 01:35:42] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:38:45] "GET /?crawl=https://yahoo.com HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://yahoo.com... | Status: True | Time: 2.34s
+[SCRAPE].. ◆ https://yahoo.com... | Time: 0.162s
+[COMPLETE] ● https://yahoo.com... | Status: True | Total: 2.50s
+127.0.0.1 - - [20/Mar/2025 01:38:58] "GET /crawl?url=https://yahoo.com HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 01:43:40] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:51:48] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:51:49] "GET / HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com/iced-lemon-pound... | Status: True | Time: 4.62s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com/iced-lemon-pound... | Time: 0.512s
+[COMPLETE] ● https://sallysbakingaddiction.com/iced-lemon-pound... | Status: True | Total: 5.14s
+127.0.0.1 - - [20/Mar/2025 01:54:44] "GET /crawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/ HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 01:55:03] "GET /deepcrawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/&depth=2 HTTP/1.0" 404 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+127.0.0.1 - - [20/Mar/2025 01:55:55] "GET /deepcrawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/&depth=2 HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:56:22] "GET /deepcrawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/&depth=2 HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 01:57:16] "GET /deepcrawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/&depth=2 HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 02:01:26] "GET / HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com/iced-lemon-pound... | Status: True | Time: 4.50s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com/iced-lemon-pound... | Time: 0.493s
+[COMPLETE] ● https://sallysbakingaddiction.com/iced-lemon-pound... | Status: True | Total: 5.00s
+127.0.0.1 - - [20/Mar/2025 02:01:47] "GET /crawl?url=https://sallysbakingaddiction.com/iced-lemon-pound-cake/ HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 3.88s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.441s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.33s
+127.0.0.1 - - [20/Mar/2025 02:03:40] "GET /crawl?url=https://sallysbakingaddiction.com&depth=2 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 3.97s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.321s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.31s
+127.0.0.1 - - [20/Mar/2025 02:04:08] "GET /crawl?url=https://sallysbakingaddiction.com HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 02:04:12] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 02:04:20] "GET /deepcrawl?url=https://sallysbakingaddiction.com&depth=2 HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 02:04:47] "GET / HTTP/1.0" 404 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 3.99s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.373s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.37s
+127.0.0.1 - - [20/Mar/2025 02:09:37] "GET /crawl?url=https://sallysbakingaddiction.com&depth=2 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.10s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.327s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.43s
+127.0.0.1 - - [20/Mar/2025 02:09:50] "GET /crawl?url=https://sallysbakingaddiction.com HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.42s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.653s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 5.08s
+127.0.0.1 - - [20/Mar/2025 02:10:17] "GET /crawl?url=https://sallysbakingaddiction.com&depth=2 HTTP/1.0" 200 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.31s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.399s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.71s
+127.0.0.1 - - [20/Mar/2025 02:11:24] "GET /crawl?url=https://sallysbakingaddiction.com&depth=2 HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 02:12:04] "GET / HTTP/1.0" 404 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://198.46.226.104:5000
+Press CTRL+C to quit
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 3.65s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.584s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.24s
+127.0.0.1 - - [20/Mar/2025 02:15:01] "GET /crawl?url=https://sallysbakingaddiction.com&depth=2 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.18s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.396s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.58s
+127.0.0.1 - - [20/Mar/2025 02:16:06] "GET /crawl?url=https://sallysbakingaddiction.com HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 02:16:08] "GET / HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 2.90s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.232s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.13s
+127.0.0.1 - - [20/Mar/2025 02:16:26] "GET /crawl?url=https://knowhalim.com HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 3.09s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.258s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.35s
+127.0.0.1 - - [20/Mar/2025 02:16:40] "GET /crawl?url=https://knowhalim.com&depth=3 HTTP/1.0" 200 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://198.46.226.104:5000
+Press CTRL+C to quit
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 3.12s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.209s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.33s
+127.0.0.1 - - [20/Mar/2025 02:19:19] "GET /crawl?url=https://knowhalim.com&depth=3 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 3.30s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.199s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.50s
+127.0.0.1 - - [20/Mar/2025 02:21:56] "GET /crawl?url=https://knowhalim.com&depth=3 HTTP/1.0" 200 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://198.46.226.104:5000
+Press CTRL+C to quit
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 3.17s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.292s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.47s
+127.0.0.1 - - [20/Mar/2025 02:24:11] "GET /crawl?url=https://knowhalim.com&depth=3 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 2.94s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.252s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.19s
+127.0.0.1 - - [20/Mar/2025 02:33:58] "GET /crawl?url=https://knowhalim.com&depth=5 HTTP/1.0" 200 -
+ * Serving Flask app 'crawl_api'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://198.46.226.104:5000
+Press CTRL+C to quit
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://knowhalim.com... | Status: True | Time: 3.24s
+[SCRAPE].. ◆ https://knowhalim.com... | Time: 0.284s
+[COMPLETE] ● https://knowhalim.com... | Status: True | Total: 3.53s
+127.0.0.1 - - [20/Mar/2025 02:37:54] "GET /crawl?url=https://knowhalim.com&depth=5 HTTP/1.0" 200 -
+127.0.0.1 - - [20/Mar/2025 02:38:04] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 02:38:04] "GET /js/twint_ch.js HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aiap.sg... | Status: True | Time: 5.08s
+[SCRAPE].. ◆ https://aiap.sg... | Time: 0.239s
+[COMPLETE] ● https://aiap.sg... | Status: True | Total: 5.32s
+127.0.0.1 - - [20/Mar/2025 02:38:35] "GET /crawl?url=https://aiap.sg HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aiap.sg... | Status: True | Time: 5.38s
+[SCRAPE].. ◆ https://aiap.sg... | Time: 0.138s
+[COMPLETE] ● https://aiap.sg... | Status: True | Total: 5.52s
+127.0.0.1 - - [20/Mar/2025 02:38:47] "GET /crawl?url=https://aiap.sg&depth=5 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aiap.sg... | Status: True | Time: 5.38s
+[SCRAPE].. ◆ https://aiap.sg... | Time: 0.169s
+[COMPLETE] ● https://aiap.sg... | Status: True | Total: 5.55s
+127.0.0.1 - - [20/Mar/2025 02:39:36] "GET /crawl?url=https://aiap.sg&depth=5 HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aiap.sg... | Status: True | Time: 5.25s
+[SCRAPE].. ◆ https://aiap.sg... | Time: 0.213s
+[COMPLETE] ● https://aiap.sg... | Status: True | Total: 5.47s
+119.74.145.167 - - [20/Mar/2025 02:40:28] "GET /crawl?url=https://aiap.sg&depth=5 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aiap.sg... | Status: True | Time: 5.15s
+[SCRAPE].. ◆ https://aiap.sg... | Time: 0.143s
+[COMPLETE] ● https://aiap.sg... | Status: True | Total: 5.29s
+119.74.145.167 - - [20/Mar/2025 02:41:34] "GET /crawl?url=https://aiap.sg&depth=5 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 5.20s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.615s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.82s
+119.74.145.167 - - [20/Mar/2025 02:48:00] "GET /crawl?url=https://aisingapore.org HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 5.32s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.676s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 6.01s
+119.74.145.167 - - [20/Mar/2025 02:48:19] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 4.27s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.727s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.02s
+119.74.145.167 - - [20/Mar/2025 02:50:16] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 3.73s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.669s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 4.40s
+119.74.145.167 - - [20/Mar/2025 02:50:41] "GET /crawl?url=https://aisingapore.org&depth=1 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 5.01s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.656s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.67s
+119.74.145.167 - - [20/Mar/2025 02:54:40] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Mar/2025 02:57:29] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:04:13] "GET / HTTP/1.0" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 4.68s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 1.05s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.73s
+119.74.145.167 - - [20/Mar/2025 03:06:10] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Mar/2025 03:10:02] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:02] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:02] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:02] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:03] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:03] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:03] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:03] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:04] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:04] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:04] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:04] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:05] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:05] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:05] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:06] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:06] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:06] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:06] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:10:06] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:12:15] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:18:45] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:32:50] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 03:32:50] "GET /js/twint_ch.js HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 04:13:59] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 04:13:59] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 04:14:14] "GET / HTTP/1.0" 404 -
+127.0.0.1 - - [20/Mar/2025 04:14:15] "GET / HTTP/1.0" 404 -
+20.65.194.28 - - [20/Mar/2025 04:55:44] "GET /v2/ HTTP/1.1" 404 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://trends.google.com/trending?geo=SG... | Status: True | Time: 4.12s
+[SCRAPE].. ◆ https://trends.google.com/trending?geo=SG... | Time: 0.627s
+[COMPLETE] ● https://trends.google.com/trending?geo=SG... | Status: True | Total: 4.75s
+119.74.145.167 - - [20/Mar/2025 05:30:41] "GET /crawl?url=https://trends.google.com/trending?geo=SG&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 3.99s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.582s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 4.58s
+119.74.145.167 - - [20/Mar/2025 05:38:41] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org?... | Status: True | Time: 4.58s
+[SCRAPE].. ◆ https://aisingapore.org?... | Time: 0.804s
+[COMPLETE] ● https://aisingapore.org?... | Status: True | Total: 5.39s
+119.74.145.167 - - [20/Mar/2025 05:39:13] "GET /crawl?url=https://aisingapore.org?&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org?... | Status: True | Time: 3.73s
+[SCRAPE].. ◆ https://aisingapore.org?... | Time: 0.715s
+[COMPLETE] ● https://aisingapore.org?... | Status: True | Total: 4.45s
+119.74.145.167 - - [20/Mar/2025 05:39:42] "GET /crawl?url=https://aisingapore.org?&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 3.74s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.567s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 4.31s
+119.74.145.167 - - [20/Mar/2025 05:39:49] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+216.218.206.67 - - [20/Mar/2025 05:40:16] "GET / HTTP/1.1" 404 -
+216.218.206.67 - - [20/Mar/2025 05:40:34] "GET /favicon.ico HTTP/1.1" 404 -
+ * Serving Flask app 'crawl_api' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+WARNING:werkzeug: * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+INFO:werkzeug: * Running on http://198.46.226.104:5000/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:55:47] "GET /crawl?url=https://sallysbakingaddiction.com HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.47s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.361s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.84s
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:56:08] "POST /crawl?url=https://sallysbakingaddiction.com HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 4.62s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.737s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 5.36s
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:56:17] "POST /crawl HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://sallysbakingaddiction.com... | Status: True | Time: 3.62s
+[SCRAPE].. ◆ https://sallysbakingaddiction.com... | Time: 0.544s
+[COMPLETE] ● https://sallysbakingaddiction.com... | Status: True | Total: 4.17s
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:56:39] "POST /crawl HTTP/1.0" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 4.62s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.549s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.18s
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:56:57] "POST /task HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:57:01] "POST /tasks HTTP/1.0" 405 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:57:07] "GET /tasks HTTP/1.0" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:57:30] "GET /tasks HTTP/1.0" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 10:58:39] "GET /api_documentation.html HTTP/1.0" 404 -
+ * Serving Flask app 'crawl_api' (lazy loading)
+ * Environment: development
+ * Debug mode: on
+Traceback (most recent call last):
+  File "/root/crawl_api.py", line 504, in <module>
+    app.run(host='0.0.0.0', port=5000)
+  File "/usr/local/lib/python3.10/dist-packages/flask/app.py", line 922, in run
+    run_simple(t.cast(str, host), port, self, **options)
+  File "/usr/local/lib/python3.10/dist-packages/werkzeug/serving.py", line 982, in run_simple
+    s.bind(server_address)
+OSError: [Errno 98] Address already in use
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:06:03] "GET /tasks HTTP/1.0" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:06:16] "GET /docs/api HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:06:19] "GET /docs/api HTTP/1.0" 404 -
+ * Serving Flask app 'crawl_api' (lazy loading)
+ * Environment: development
+ * Debug mode: on
+WARNING:werkzeug: * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+INFO:werkzeug: * Running on http://198.46.226.104:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 125-807-672
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:07:10] "GET /tasks HTTP/1.0" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:07:22] "GET /docs/api HTTP/1.0" 200 -
+ERROR:werkzeug:51.91.174.251 - - [20/Mar/2025 11:14:22] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x03\x01§\x01\x00\x01£\x03\x03ñ\x8eaâ\x8f¬»ìþ\x00á÷n\x98».\x00\x13xÒ\x92\x83]\x01Ð\x89§\x08\x935\x9dú')
+INFO:werkzeug:51.91.174.251 - - [20/Mar/2025 11:14:22] "§ £ñaâ¬»ìþ á÷n». xÒ]Ð§5ú ¶¬ÊkÙ" HTTPStatus.BAD_REQUEST -
+INFO:werkzeug:51.91.174.245 - - [20/Mar/2025 11:14:26] "GET / HTTP/1.1" 404 -
+ERROR:werkzeug:91.196.152.36 - - [20/Mar/2025 11:21:10] code 400, message Bad request syntax ("\x16\x03\x03\x01§\x01\x00\x01£\x03\x03ò'Øá\x831,+a")
+INFO:werkzeug:91.196.152.36 - - [20/Mar/2025 11:21:10] "§ £ò'Øá1,+a" HTTPStatus.BAD_REQUEST -
+INFO:werkzeug:91.196.152.123 - - [20/Mar/2025 11:21:12] "GET /favicon.ico HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:41:20] "HEAD /.zer0day HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 11:41:20] "GET /.env HTTP/1.0" 404 -
+INFO:werkzeug: * Detected change in '/root/crawl_api.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 125-807-672
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 12:11:53] "GET /docs/api HTTP/1.0" 200 -
+INFO:werkzeug: * Detected change in '/root/crawl_api.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 125-807-672
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 12:14:05] "GET /docs/directus HTTP/1.0" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 12:21:25] "GET /docs/directus HTTP/1.0" 200 -
+INFO:werkzeug: * Detected change in '/root/crawl_api.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 125-807-672
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 12:32:56] "GET /docs/directus-appsmith HTTP/1.0" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 12:33:11] "GET /crawlai-directus-appsmith HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 12:33:20] "GET /docs/crawlai-directus-appsmith HTTP/1.0" 200 -
+ERROR:werkzeug:147.185.132.44 - - [20/Mar/2025 12:55:07] code 400, message Bad request version ('h')
+INFO:werkzeug:147.185.132.44 - - [20/Mar/2025 12:55:07] " î  êy'åi© @h" HTTPStatus.BAD_REQUEST -
+ERROR:werkzeug:147.185.132.44 - - [20/Mar/2025 12:55:07] code 400, message Bad request version ('À(À$À\x14À')
+INFO:werkzeug:147.185.132.44 - - [20/Mar/2025 12:55:07] " Ê  ÆëaDÈ6í:6èIª¯´{Q?JQÚ%¬-íO  hÌÌÀ/À+À0À,ÀÀÀ'À#ÀÀ	À(À$ÀÀ" HTTPStatus.BAD_REQUEST -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 13:39:14] "GET / HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 13:39:14] "GET /js/twint_ch.js HTTP/1.0" 404 -
+INFO:werkzeug:74.82.47.4 - - [20/Mar/2025 13:55:20] "GET / HTTP/1.1" 404 -
+INFO:werkzeug:74.82.47.4 - - [20/Mar/2025 13:55:35] "GET /favicon.ico HTTP/1.1" 404 -
+INFO:werkzeug:58.76.26.166 - - [20/Mar/2025 14:38:03] "GET / HTTP/1.0" 404 -
+INFO:werkzeug:119.74.145.167 - - [20/Mar/2025 14:57:05] "GET /crawl?url=https://aisingapore.org&depth=3 HTTP/1.1" 200 -
+[INIT].... → Crawl4AI 0.5.0.post4
+[FETCH]... ↓ https://aisingapore.org... | Status: True | Time: 4.86s
+[SCRAPE].. ◆ https://aisingapore.org... | Time: 0.568s
+[COMPLETE] ● https://aisingapore.org... | Status: True | Total: 5.43s
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 15:30:21] "GET / HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 15:30:21] "GET /favicon.ico HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 15:30:21] "GET / HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 15:30:21] "GET /favicon.ico HTTP/1.0" 404 -
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2025 15:30:45] "GET /docs/api HTTP/1.0" 200 -

@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrating Crawl4AI with Directus - Tutorial</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        code {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            padding: 2px 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            overflow: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            line-height: 1.4;
+        }
+        .step {
+            background-color: #f9f9f9;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .step-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            margin: 10px 0;
+        }
+        .note {
+            background-color: #fff8dc;
+            border-left: 4px solid #f1c40f;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .warning {
+            background-color: #ffebee;
+            border-left: 4px solid #e74c3c;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .nav {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #3498db;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Integrating Crawl4AI with Directus - Tutorial</h1>
+    
+    <div class="nav">
+        <a href="#overview">Overview</a>
+        <a href="#prerequisites">Prerequisites</a>
+        <a href="#setup-directus">Setting Up Directus</a>
+        <a href="#create-collections">Creating Collections</a>
+        <a href="#setup-flow">Setting Up Flows</a>
+        <a href="#create-webhook">Creating a Webhook</a>
+        <a href="#frontend-integration">Frontend Integration</a>
+        <a href="#user-management">User Management</a>
+        <a href="#advanced">Advanced Use Cases</a>
+    </div>
+    
+    <h2 id="overview">Overview</h2>
+    <p>
+        This tutorial will guide you through integrating the Crawl4AI API with Directus, 
+        a headless CMS that provides a flexible and powerful way to manage your content. 
+        By the end of this tutorial, you'll have a system that can:
+    </p>
+    <ul>
+        <li>Trigger web crawls from Directus</li>
+        <li>Store crawl results in Directus collections</li>
+        <li>Process and display crawled content through Directus</li>
+        <li>Set up automated crawling workflows</li>
+    </ul>
+    
+    <h2 id="prerequisites">Prerequisites</h2>
+    <div class="step">
+        <div class="step-number">Before You Begin</div>
+        <p>Make sure you have the following:</p>
+        <ul>
+            <li>A running instance of the Crawl4AI API server</li>
+            <li>A Directus instance (v9.0 or later)</li>
+            <li>Administrative access to your Directus instance</li>
+            <li>Basic knowledge of REST APIs and JavaScript</li>
+        </ul>
+        
+        <div class="note">
+            <strong>Note:</strong> This tutorial assumes your Crawl4AI API is running at <code>http://your-server:5000</code>. 
+            Replace this with your actual API endpoint throughout the tutorial.
+        </div>
+    </div>
+    
+    <h2 id="setup-directus">Setting Up Directus</h2>
+    <div class="step">
+        <div class="step-number">Step 1: Install Directus</div>
+        <p>If you haven't already installed Directus, you can do so using Docker:</p>
+        <pre>
+docker run -p 8055:8055 \
+  -e KEY=replace-with-random-value \
+  -e SECRET=replace-with-random-value \
+  -e ADMIN_EMAIL=admin@example.com \
+  -e ADMIN_PASSWORD=d1r3ctu5 \
+  -v ./data:/directus/database \
+  directus/directus</pre>
+        <p>Or you can follow the <a href="https://docs.directus.io/getting-started/installation.html" target="_blank">official installation guide</a>.</p>
+    </div>
+    
+    <h2 id="create-collections">Creating Collections in Directus</h2>
+    <div class="step">
+        <div class="step-number">Step 2: Create Crawl Tasks Collection</div>
+        <p>First, we'll create a collection to store crawl tasks:</p>
+        <ol>
+            <li>Log in to your Directus admin panel</li>
+            <li>Go to <strong>Settings</strong> > <strong>Data Model</strong></li>
+            <li>Click <strong>Create Collection</strong></li>
+            <li>Enter "crawl_tasks" as the collection name</li>
+            <li>Add the following fields:</li>
+        </ol>
+        
+        <table>
+            <tr>
+                <th>Field Name</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>UUID</td>
+                <td>Yes</td>
+                <td>Primary key, auto-generated</td>
+            </tr>
+            <tr>
+                <td>url</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>URL to crawl</td>
+            </tr>
+            <tr>
+                <td>depth</td>
+                <td>Integer</td>
+                <td>Yes</td>
+                <td>Default: 1</td>
+            </tr>
+            <tr>
+                <td>max_pages</td>
+                <td>Integer</td>
+                <td>No</td>
+                <td>Default: 100</td>
+            </tr>
+            <tr>
+                <td>extract_images</td>
+                <td>Boolean</td>
+                <td>No</td>
+                <td>Default: false</td>
+            </tr>
+            <tr>
+                <td>follow_external_links</td>
+                <td>Boolean</td>
+                <td>No</td>
+                <td>Default: false</td>
+            </tr>
+            <tr>
+                <td>excluded_domains</td>
+                <td>JSON</td>
+                <td>No</td>
+                <td>Array of domains to exclude</td>
+            </tr>
+            <tr>
+                <td>task_id</td>
+                <td>String</td>
+                <td>No</td>
+                <td>ID returned by the Crawl4AI API</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>Options: pending, running, completed, failed</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>Timestamp</td>
+                <td>Yes</td>
+                <td>Auto-generated</td>
+            </tr>
+            <tr>
+                <td>updated_at</td>
+                <td>Timestamp</td>
+                <td>Yes</td>
+                <td>Auto-generated</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 3: Create Crawl Results Collection</div>
+        <p>Next, we'll create a collection to store crawl results:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Data Model</strong></li>
+            <li>Click <strong>Create Collection</strong></li>
+            <li>Enter "crawl_results" as the collection name</li>
+            <li>Add the following fields:</li>
+        </ol>
+        
+        <table>
+            <tr>
+                <th>Field Name</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>UUID</td>
+                <td>Yes</td>
+                <td>Primary key, auto-generated</td>
+            </tr>
+            <tr>
+                <td>task_id</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>ID from the Crawl4AI API</td>
+            </tr>
+            <tr>
+                <td>crawl_task</td>
+                <td>M2O</td>
+                <td>Yes</td>
+                <td>Relation to crawl_tasks collection</td>
+            </tr>
+            <tr>
+                <td>content</td>
+                <td>Text</td>
+                <td>No</td>
+                <td>Markdown content from the crawl</td>
+            </tr>
+            <tr>
+                <td>links</td>
+                <td>JSON</td>
+                <td>No</td>
+                <td>Links extracted from the crawl</td>
+            </tr>
+            <tr>
+                <td>images</td>
+                <td>JSON</td>
+                <td>No</td>
+                <td>Images extracted from the crawl</td>
+            </tr>
+            <tr>
+                <td>metadata</td>
+                <td>JSON</td>
+                <td>No</td>
+                <td>Additional metadata from the crawl</td>
+            </tr>
+            <tr>
+                <td>crawl_time</td>
+                <td>Float</td>
+                <td>No</td>
+                <td>Time taken to complete the crawl (seconds)</td>
+            </tr>
+            <tr>
+                <td>pages_crawled</td>
+                <td>Integer</td>
+                <td>No</td>
+                <td>Number of pages crawled</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>Timestamp</td>
+                <td>Yes</td>
+                <td>Auto-generated</td>
+            </tr>
+        </table>
+        
+        <p>Set up the relation between the collections:</p>
+        <ol>
+            <li>In the crawl_results collection, edit the "crawl_task" field</li>
+            <li>Set the Related Collection to "crawl_tasks"</li>
+            <li>Set the Related Field to "id"</li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 4: Create Crawled Images Collection (Optional)</div>
+        <p>If you want to store and manage crawled images separately:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Data Model</strong></li>
+            <li>Click <strong>Create Collection</strong></li>
+            <li>Enter "crawled_images" as the collection name</li>
+            <li>Add the following fields:</li>
+        </ol>
+        
+        <table>
+            <tr>
+                <th>Field Name</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>UUID</td>
+                <td>Yes</td>
+                <td>Primary key, auto-generated</td>
+            </tr>
+            <tr>
+                <td>crawl_result</td>
+                <td>M2O</td>
+                <td>Yes</td>
+                <td>Relation to crawl_results collection</td>
+            </tr>
+            <tr>
+                <td>url</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>Original image URL</td>
+            </tr>
+            <tr>
+                <td>image</td>
+                <td>File</td>
+                <td>No</td>
+                <td>Stored image file (if downloaded)</td>
+            </tr>
+            <tr>
+                <td>alt</td>
+                <td>String</td>
+                <td>No</td>
+                <td>Alt text from the image</td>
+            </tr>
+            <tr>
+                <td>width</td>
+                <td>Integer</td>
+                <td>No</td>
+                <td>Image width</td>
+            </tr>
+            <tr>
+                <td>height</td>
+                <td>Integer</td>
+                <td>No</td>
+                <td>Image height</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>Timestamp</td>
+                <td>Yes</td>
+                <td>Auto-generated</td>
+            </tr>
+        </table>
+    </div>
+    
+    <h2 id="setup-flow">Setting Up Flows in Directus</h2>
+    <div class="step">
+        <div class="step-number">Step 5: Create a Flow to Trigger Crawls</div>
+        <p>Now we'll create a flow that triggers a crawl when a new crawl_task is created:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Flows</strong></li>
+            <li>Click <strong>Create Flow</strong></li>
+            <li>Enter "Trigger Crawl" as the name</li>
+            <li>Set the status to "Active"</li>
+            <li>Set the trigger to "Event Hook"</li>
+            <li>Configure the trigger:
+                <ul>
+                    <li>Scope: "Items"</li>
+                    <li>Action: "Create"</li>
+                    <li>Collection: "crawl_tasks"</li>
+                </ul>
+            </li>
+            <li>Click <strong>Create</strong></li>
+        </ol>
+        
+        <p>Now add an operation to the flow:</p>
+        <ol>
+            <li>Click <strong>Create Operation</strong></li>
+            <li>Select "Run Script" as the type</li>
+            <li>Enter "Start Crawl" as the name</li>
+            <li>Enter the following code in the script editor:</li>
+        </ol>
+        
+        <pre>
+module.exports = async function(data, { services, exceptions }) {
+  const { ItemsService } = services;
+  const { ServiceUnavailableException } = exceptions;
+  
+  const taskId = data.key;
+  const taskData = data.payload;
+  
+  // Prepare the request to the Crawl4AI API
+  const requestBody = {
+    url: taskData.url,
+    depth: taskData.depth || 1,
+    max_pages: taskData.max_pages || 100,
+    extract_images: taskData.extract_images || false,
+    follow_external_links: taskData.follow_external_links || false,
+    callback_url: `${process.env.PUBLIC_URL}/webhook/crawl-callback`
+  };
+  
+  // Add excluded domains if present
+  if (taskData.excluded_domains) {
+    requestBody.excluded_domains = taskData.excluded_domains;
+  }
+  
+  try {
+    // Update task status to running
+    const tasksService = new ItemsService('crawl_tasks', {
+      schema: req.schema,
+      accountability: req.accountability
+    });
+    
+    await tasksService.updateOne(taskId, {
+      status: 'running'
+    });
+    
+    // Call the Crawl4AI API
+    const response = await fetch('http://your-server:5000/crawl', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    // Update the task with the task_id from the API
+    await tasksService.updateOne(taskId, {
+      task_id: result.task_id,
+      status: 'running'
+    });
+    
+    return {
+      task_id: result.task_id
+    };
+  } catch (error) {
+    // Update task status to failed
+    const tasksService = new ItemsService('crawl_tasks', {
+      schema: req.schema,
+      accountability: req.accountability
+    });
+    
+    await tasksService.updateOne(taskId, {
+      status: 'failed'
+    });
+    
+    throw new ServiceUnavailableException(error.message);
+  }
+};
+</pre>
+        
+        <div class="note">
+            <strong>Note:</strong> Replace <code>http://your-server:5000</code> with your actual Crawl4AI API endpoint.
+        </div>
+    </div>
+    
+    <h2 id="create-webhook">Creating a Webhook for Callbacks</h2>
+    <div class="step">
+        <div class="step-number">Step 6: Create a Webhook Endpoint</div>
+        <p>Now we need to create a webhook endpoint to receive callbacks from the Crawl4AI API:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Project Settings</strong></li>
+            <li>Scroll down to the "Custom Endpoints" section</li>
+            <li>Click <strong>Add Endpoint</strong></li>
+            <li>Configure the endpoint:
+                <ul>
+                    <li>Name: "crawl-callback"</li>
+                    <li>Method: "POST"</li>
+                    <li>Path: "/webhook/crawl-callback"</li>
+                </ul>
+            </li>
+            <li>Enter the following code:</li>
+        </ol>
+        
+        <pre>
+module.exports = async (req, res) => {
+  const { services, exceptions } = req.accountability;
+  const { ItemsService } = services;
+  const { ServiceUnavailableException } = exceptions;
+  
+  try {
+    const callbackData = req.body;
+    
+    // Validate the callback data
+    if (!callbackData.task_id || !callbackData.status) {
+      return res.status(400).send('Invalid callback data');
+    }
+    
+    // Get the task from the database
+    const tasksService = new ItemsService('crawl_tasks', {
+      schema: req.schema,
+      accountability: req.accountability
+    });
+    
+    const tasks = await tasksService.readByQuery({
+      filter: { task_id: callbackData.task_id }
+    });
+    
+    if (tasks.length === 0) {
+      return res.status(404).send('Task not found');
+    }
+    
+    const task = tasks[0];
+    
+    // Update the task status
+    await tasksService.updateOne(task.id, {
+      status: callbackData.status
+    });
+    
+    // If the task completed successfully, store the results
+    if (callbackData.status === 'completed' && callbackData.result) {
+      const resultsService = new ItemsService('crawl_results', {
+        schema: req.schema,
+        accountability: req.accountability
+      });
+      
+      // Create a new result record
+      await resultsService.createOne({
+        task_id: callbackData.task_id,
+        crawl_task: task.id,
+        content: callbackData.result.content,
+        links: callbackData.result.links,
+        images: callbackData.result.images,
+        metadata: callbackData.result.metadata,
+        crawl_time: callbackData.result.crawl_time,
+        pages_crawled: callbackData.result.pages_crawled
+      });
+      
+      // If we have images and the crawled_images collection exists, store them
+      if (callbackData.result.images && Array.isArray(callbackData.result.images)) {
+        try {
+          const imagesService = new ItemsService('crawled_images', {
+            schema: req.schema,
+            accountability: req.accountability
+          });
+          
+          // Get the ID of the result we just created
+          const results = await resultsService.readByQuery({
+            filter: { task_id: callbackData.task_id },
+            sort: ['-created_at'],
+            limit: 1
+          });
+          
+          if (results.length > 0) {
+            const resultId = results[0].id;
+            
+            // Create image records
+            for (const image of callbackData.result.images) {
+              await imagesService.createOne({
+                crawl_result: resultId,
+                url: image.url,
+                alt: image.alt,
+                width: image.width,
+                height: image.height
+              });
+            }
+          }
+        } catch (error) {
+          // If the crawled_images collection doesn't exist, just ignore
+          console.log('Error storing images:', error);
+        }
+      }
+    }
+    
+    return res.status(200).send('Callback processed successfully');
+  } catch (error) {
+    console.error('Error processing callback:', error);
+    return res.status(500).send('Error processing callback');
+  }
+};
+</pre>
+    </div>
+    
+    <h2 id="frontend-integration">Frontend Integration</h2>
+    <div class="step">
+        <div class="step-number">Step 7: Create a Custom Module for Crawling</div>
+        <p>Let's create a custom module in Directus to provide a user-friendly interface for crawling:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Project Settings</strong></li>
+            <li>Scroll down to the "Modules" section</li>
+            <li>Click <strong>Add Module</strong></li>
+            <li>Configure the module:
+                <ul>
+                    <li>Name: "Web Crawler"</li>
+                    <li>Icon: "public"</li>
+                    <li>Color: "#3498db"</li>
+                </ul>
+            </li>
+            <li>Save the module</li>
+        </ol>
+        
+        <p>Now create a custom page for the module:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Project Settings</strong></li>
+            <li>Scroll down to the "Pages" section</li>
+            <li>Click <strong>Add Page</strong></li>
+            <li>Configure the page:
+                <ul>
+                    <li>Name: "New Crawl"</li>
+                    <li>Icon: "add"</li>
+                    <li>Module: "Web Crawler"</li>
+                    <li>Type: "Component"</li>
+                </ul>
+            </li>
+            <li>Save the page</li>
+        </ol>
+        
+        <p>Now create a Vue component for the page:</p>
+        <ol>
+            <li>Create a new file in your Directus extensions folder: <code>extensions/modules/web-crawler/new-crawl.vue</code></li>
+            <li>Add the following code:</li>
+        </ol>
+        
+        <pre>
+&lt;template&gt;
+  &lt;private-view title="New Web Crawl" :breadcrumb="breadcrumb"&gt;
+    &lt;template #headline&gt;Start a new web crawl&lt;/template&gt;
+    
+    &lt;div class="crawler-form"&gt;
+      &lt;v-form v-model="valid" @submit.prevent="submitCrawl"&gt;
+        &lt;v-input
+          v-model="url"
+          name="url"
+          type="url"
+          label="URL to Crawl"
+          required
+        /&gt;
+        
+        &lt;v-input
+          v-model="depth"
+          name="depth"
+          type="number"
+          label="Crawl Depth"
+          min="1"
+          max="5"
+        /&gt;
+        
+        &lt;v-input
+          v-model="maxPages"
+          name="maxPages"
+          type="number"
+          label="Maximum Pages"
+          min="1"
+          max="500"
+        /&gt;
+        
+        &lt;v-checkbox
+          v-model="extractImages"
+          label="Extract Images"
+        /&gt;
+        
+        &lt;v-checkbox
+          v-model="followExternalLinks"
+          label="Follow External Links"
+        /&gt;
+        
+        &lt;v-textarea
+          v-model="excludedDomains"
+          name="excludedDomains"
+          label="Excluded Domains (one per line)"
+        /&gt;
+        
+        &lt;v-button type="submit" :loading="loading"&gt;Start Crawl&lt;/v-button&gt;
+      &lt;/v-form&gt;
+    &lt;/div&gt;
+    
+    &lt;v-dialog v-model="showResultDialog" persistent&gt;
+      &lt;v-card&gt;
+        &lt;v-card-title&gt;Crawl Started&lt;/v-card-title&gt;
+        &lt;v-card-text&gt;
+          &lt;p&gt;Your crawl has been started successfully.&lt;/p&gt;
+          &lt;p&gt;Task ID: {{ taskId }}&lt;/p&gt;
+        &lt;/v-card-text&gt;
+        &lt;v-card-actions&gt;
+          &lt;v-button @click="showResultDialog = false"&gt;Close&lt;/v-button&gt;
+          &lt;v-button @click="viewTask"&gt;View Task&lt;/v-button&gt;
+        &lt;/v-card-actions&gt;
+      &lt;/v-card&gt;
+    &lt;/v-dialog&gt;
+  &lt;/private-view&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      valid: false,
+      loading: false,
+      url: '',
+      depth: 1,
+      maxPages: 100,
+      extractImages: false,
+      followExternalLinks: false,
+      excludedDomains: '',
+      showResultDialog: false,
+      taskId: null,
+      breadcrumb: [
+        {
+          name: 'Web Crawler',
+          to: '/web-crawler'
+        }
+      ]
+    };
+  },
+  methods: {
+    async submitCrawl() {
+      if (!this.valid) return;
+      
+      this.loading = true;
+      
+      try {
+        // Parse excluded domains
+        const excludedDomains = this.excludedDomains
+          .split('\n')
+          .map(domain => domain.trim())
+          .filter(domain => domain.length > 0);
+        
+        // Create a new crawl task
+        const response = await this.$api.post('/items/crawl_tasks', {
+          url: this.url,
+          depth: this.depth,
+          max_pages: this.maxPages,
+          extract_images: this.extractImages,
+          follow_external_links: this.followExternalLinks,
+          excluded_domains: excludedDomains.length > 0 ? excludedDomains : null,
+          status: 'pending'
+        });
+        
+        this.taskId = response.data.data.id;
+        this.showResultDialog = true;
+      } catch (error) {
+        this.$dialog.error({
+          title: 'Error',
+          text: `Failed to start crawl: ${error.message}`
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+    viewTask() {
+      this.$router.push(`/content/crawl_tasks/${this.taskId}`);
+    }
+  }
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.crawler-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+&lt;/style&gt;
+</pre>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 8: Create a Results Viewer</div>
+        <p>Let's create another page to view crawl results:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Project Settings</strong></li>
+            <li>Scroll down to the "Pages" section</li>
+            <li>Click <strong>Add Page</strong></li>
+            <li>Configure the page:
+                <ul>
+                    <li>Name: "View Results"</li>
+                    <li>Icon: "search"</li>
+                    <li>Module: "Web Crawler"</li>
+                    <li>Type: "Component"</li>
+                </ul>
+            </li>
+            <li>Save the page</li>
+        </ol>
+        
+        <p>Create a Vue component for the results page:</p>
+        <ol>
+            <li>Create a new file in your Directus extensions folder: <code>extensions/modules/web-crawler/view-results.vue</code></li>
+            <li>Add the following code:</li>
+        </ol>
+        
+        <pre>
+&lt;template&gt;
+  &lt;private-view title="Crawl Results" :breadcrumb="breadcrumb"&gt;
+    &lt;template #headline&gt;View and manage crawl results&lt;/template&gt;
+    
+    &lt;div class="results-container"&gt;
+      &lt;v-table
+        :items="results"
+        :headers="headers"
+        :loading="loading"
+        @click:row="openResult"
+      &gt;
+        &lt;template #item.status="{ item }"&gt;
+          &lt;v-chip :color="getStatusColor(item.status)"&gt;{{ item.status }}&lt;/v-chip&gt;
+        &lt;/template&gt;
+        
+        &lt;template #item.created_at="{ item }"&gt;
+          {{ formatDate(item.created_at) }}
+        &lt;/template&gt;
+      &lt;/v-table&gt;
+    &lt;/div&gt;
+    
+    &lt;v-dialog v-if="selectedResult" v-model="showResultDialog" persistent&gt;
+      &lt;v-card&gt;
+        &lt;v-card-title&gt;Crawl Result: {{ selectedResult.url }}&lt;/v-card-title&gt;
+        &lt;v-card-text&gt;
+          &lt;div v-if="resultDetails"&gt;
+            &lt;div class="result-stats"&gt;
+              &lt;div&gt;Pages Crawled: {{ resultDetails.pages_crawled }}&lt;/div&gt;
+              &lt;div&gt;Crawl Time: {{ resultDetails.crawl_time }}s&lt;/div&gt;
+              &lt;div v-if="resultDetails.links"&gt;
+                Links: {{ resultDetails.links.total_count }}
+                ({{ resultDetails.links.internal.length }} internal, 
+                {{ resultDetails.links.external.length }} external)
+              &lt;/div&gt;
+              &lt;div v-if="resultDetails.images"&gt;
+                Images: {{ resultDetails.images.length }}
+              &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;v-tabs&gt;
+              &lt;v-tab&gt;Content&lt;/v-tab&gt;
+              &lt;v-tab&gt;Links&lt;/v-tab&gt;
+              &lt;v-tab&gt;Images&lt;/v-tab&gt;
+              
+              &lt;v-tab-item&gt;
+                &lt;div class="content-preview"&gt;
+                  &lt;v-markdown :text="resultDetails.content" /&gt;
+                &lt;/div&gt;
+              &lt;/v-tab-item&gt;
+              
+              &lt;v-tab-item&gt;
+                &lt;div v-if="resultDetails.links"&gt;
+                  &lt;h3&gt;Internal Links&lt;/h3&gt;
+                  &lt;ul&gt;
+                    &lt;li v-for="link in resultDetails.links.internal" :key="link"&gt;
+                      &lt;a :href="link" target="_blank"&gt;{{ link }}&lt;/a&gt;
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                  
+                  &lt;h3&gt;External Links&lt;/h3&gt;
+                  &lt;ul&gt;
+                    &lt;li v-for="link in resultDetails.links.external" :key="link"&gt;
+                      &lt;a :href="link" target="_blank"&gt;{{ link }}&lt;/a&gt;
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                  
+                  &lt;h3&gt;Domains&lt;/h3&gt;
+                  &lt;ul&gt;
+                    &lt;li v-for="(count, domain) in resultDetails.links.domains" :key="domain"&gt;
+                      {{ domain }}: {{ count }} links
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/div&gt;
+              &lt;/v-tab-item&gt;
+              
+              &lt;v-tab-item&gt;
+                &lt;div v-if="resultDetails.images" class="images-grid"&gt;
+                  &lt;div v-for="image in resultDetails.images" :key="image.url" class="image-item"&gt;
+                    &lt;img :src="image.url" :alt="image.alt" /&gt;
+                    &lt;div class="image-info"&gt;
+                      &lt;div&gt;{{ image.alt || 'No alt text' }}&lt;/div&gt;
+                      &lt;div v-if="image.width && image.height"&gt;{{ image.width }}x{{ image.height }}&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/v-tab-item&gt;
+            &lt;/v-tabs&gt;
+          &lt;/div&gt;
+          &lt;div v-else-if="loadingDetails"&gt;
+            Loading result details...
+          &lt;/div&gt;
+          &lt;div v-else&gt;
+            No details available for this result.
+          &lt;/div&gt;
+        &lt;/v-card-text&gt;
+        &lt;v-card-actions&gt;
+          &lt;v-button @click="showResultDialog = false"&gt;Close&lt;/v-button&gt;
+          &lt;v-button @click="exportResult" :disabled="!resultDetails"&gt;Export&lt;/v-button&gt;
+        &lt;/v-card-actions&gt;
+      &lt;/v-card&gt;
+    &lt;/v-dialog&gt;
+  &lt;/private-view&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      loading: false,
+      results: [],
+      headers: [
+        {
+          text: 'URL',
+          value: 'url',
+          align: 'left'
+        },
+        {
+          text: 'Status',
+          value: 'status',
+          align: 'left'
+        },
+        {
+          text: 'Depth',
+          value: 'depth',
+          align: 'left'
+        },
+        {
+          text: 'Created',
+          value: 'created_at',
+          align: 'left'
+        }
+      ],
+      selectedResult: null,
+      showResultDialog: false,
+      resultDetails: null,
+      loadingDetails: false,
+      breadcrumb: [
+        {
+          name: 'Web Crawler',
+          to: '/web-crawler'
+        }
+      ]
+    };
+  },
+  created() {
+    this.fetchResults();
+  },
+  methods: {
+    async fetchResults() {
+      this.loading = true;
+      
+      try {
+        const response = await this.$api.get('/items/crawl_tasks', {
+          params: {
+            sort: '-created_at'
+          }
+        });
+        
+        this.results = response.data.data;
+      } catch (error) {
+        this.$dialog.error({
+          title: 'Error',
+          text: `Failed to fetch results: ${error.message}`
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+    async openResult(result) {
+      this.selectedResult = result;
+      this.showResultDialog = true;
+      this.loadingDetails = true;
+      this.resultDetails = null;
+      
+      try {
+        // Only fetch details if the task is completed
+        if (result.status === 'completed') {
+          const response = await this.$api.get('/items/crawl_results', {
+            params: {
+              filter: {
+                crawl_task: {
+                  _eq: result.id
+                }
+              },
+              limit: 1
+            }
+          });
+          
+          if (response.data.data.length > 0) {
+            this.resultDetails = response.data.data[0];
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch result details:', error);
+      } finally {
+        this.loadingDetails = false;
+      }
+    },
+    getStatusColor(status) {
+      switch (status) {
+        case 'completed':
+          return 'success';
+        case 'running':
+          return 'primary';
+        case 'pending':
+          return 'warning';
+        case 'failed':
+          return 'error';
+        default:
+          return 'grey';
+      }
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleString();
+    },
+    exportResult() {
+      if (!this.resultDetails) return;
+      
+      // Create a JSON file for download
+      const dataStr = JSON.stringify(this.resultDetails, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = `crawl-${this.selectedResult.id}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    }
+  }
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.results-container {
+  margin-bottom: 20px;
+}
+
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.content-preview {
+  padding: 15px;
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.image-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  object-fit: cover;
+}
+
+.image-info {
+  padding: 8px;
+  font-size: 0.9em;
+  background-color: #f5f5f5;
+}
+&lt;/style&gt;
+</pre>
+    </div>
+    
+    <h2 id="user-management">User Management</h2>
+    <div class="step">
+        <div class="step-number">Step 9: Setting Up User Roles and Permissions</div>
+        <p>
+            When multiple people use the crawling system, it's important to set up proper user roles and permissions.
+            This ensures that each user can only see and manage their own crawl tasks and results, while administrators
+            have full access to everything.
+        </p>
+        
+        <h3>Creating User Roles</h3>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Roles & Permissions</strong></li>
+            <li>Click <strong>Create Role</strong></li>
+            <li>Create the following roles:
+                <ul>
+                    <li><strong>Crawler Admin</strong>: Full access to all crawl-related collections and operations</li>
+                    <li><strong>Crawler User</strong>: Limited access to only their own crawl tasks and results</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3>Setting Up Permissions for Crawler User Role</h3>
+        <p>For the Crawler User role, set up the following permissions:</p>
+        
+        <table>
+            <tr>
+                <th>Collection</th>
+                <th>Create</th>
+                <th>Read</th>
+                <th>Update</th>
+                <th>Delete</th>
+                <th>Field Permissions</th>
+            </tr>
+            <tr>
+                <td>crawl_tasks</td>
+                <td>✓</td>
+                <td>Use custom access</td>
+                <td>Use custom access</td>
+                <td>Use custom access</td>
+                <td>All fields except system fields</td>
+            </tr>
+            <tr>
+                <td>crawl_results</td>
+                <td>✗</td>
+                <td>Use custom access</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>All fields except system fields</td>
+            </tr>
+            <tr>
+                <td>crawled_images</td>
+                <td>✗</td>
+                <td>Use custom access</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>All fields except system fields</td>
+            </tr>
+        </table>
+        
+        <h3>Setting Up Custom Access Rules</h3>
+        <p>For each "Use custom access" permission, set up the following filters:</p>
+        
+        <h4>crawl_tasks - Read Filter:</h4>
+        <pre>
+{
+  "user_created": {
+    "_eq": "$CURRENT_USER"
+  }
+}
+</pre>
+        
+        <h4>crawl_tasks - Update Filter:</h4>
+        <pre>
+{
+  "user_created": {
+    "_eq": "$CURRENT_USER"
+  }
+}
+</pre>
+        
+        <h4>crawl_tasks - Delete Filter:</h4>
+        <pre>
+{
+  "user_created": {
+    "_eq": "$CURRENT_USER"
+  }
+}
+</pre>
+        
+        <h4>crawl_results - Read Filter:</h4>
+        <pre>
+{
+  "crawl_task": {
+    "user_created": {
+      "_eq": "$CURRENT_USER"
+    }
+  }
+}
+</pre>
+        
+        <h4>crawled_images - Read Filter:</h4>
+        <pre>
+{
+  "crawl_result": {
+    "crawl_task": {
+      "user_created": {
+        "_eq": "$CURRENT_USER"
+      }
+    }
+  }
+}
+</pre>
+        
+        <div class="note">
+            <strong>Note:</strong> For these filters to work, you need to add a <code>user_created</code> field to the <code>crawl_tasks</code> collection.
+            This field should be of type "User" and should be set to the current user when a task is created.
+        </div>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 10: Modifying Collections for User Ownership</div>
+        <p>To implement user-specific data access, we need to modify our collections:</p>
+        
+        <h3>Update the crawl_tasks Collection</h3>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Data Model</strong></li>
+            <li>Select the "crawl_tasks" collection</li>
+            <li>Click <strong>Create Field</strong></li>
+            <li>Configure the field:
+                <ul>
+                    <li>Name: "user_created"</li>
+                    <li>Type: "User"</li>
+                    <li>Required: Yes</li>
+                    <li>Default Value: $CURRENT_USER</li>
+                </ul>
+            </li>
+            <li>Save the field</li>
+        </ol>
+        
+        <h3>Update the Flow to Include User Information</h3>
+        <p>Modify the "Trigger Crawl" flow to include user information:</p>
+        <pre>
+module.exports = async function(data, { services, exceptions, accountability }) {
+  const { ItemsService } = services;
+  const { ServiceUnavailableException } = exceptions;
+  
+  const taskId = data.key;
+  const taskData = data.payload;
+  
+  // Get the current user ID
+  const userId = accountability.user;
+  
+  // Prepare the request to the Crawl4AI API
+  const requestBody = {
+    url: taskData.url,
+    depth: taskData.depth || 1,
+    max_pages: taskData.max_pages || 100,
+    extract_images: taskData.extract_images || false,
+    follow_external_links: taskData.follow_external_links || false,
+    callback_url: `${process.env.PUBLIC_URL}/webhook/crawl-callback`
+  };
+  
+  // Add excluded domains if present
+  if (taskData.excluded_domains) {
+    requestBody.excluded_domains = taskData.excluded_domains;
+  }
+  
+  try {
+    // Update task status to running
+    const tasksService = new ItemsService('crawl_tasks', {
+      schema: req.schema,
+      accountability: req.accountability
+    });
+    
+    await tasksService.updateOne(taskId, {
+      status: 'running',
+      user_created: userId // Ensure user is set
+    });
+    
+    // Call the Crawl4AI API
+    const response = await fetch('http://your-server:5000/crawl', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    // Update the task with the task_id from the API
+    await tasksService.updateOne(taskId, {
+      task_id: result.task_id,
+      status: 'running'
+    });
+    
+    return {
+      task_id: result.task_id
+    };
+  } catch (error) {
+    // Update task status to failed
+    const tasksService = new ItemsService('crawl_tasks', {
+      schema: req.schema,
+      accountability: req.accountability
+    });
+    
+    await tasksService.updateOne(taskId, {
+      status: 'failed'
+    });
+    
+    throw new ServiceUnavailableException(error.message);
+  }
+};
+</pre>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 11: Creating and Managing Users</div>
+        <p>Now let's set up the process for creating and managing users:</p>
+        
+        <h3>Creating New Users</h3>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>User Management</strong></li>
+            <li>Click <strong>Create User</strong></li>
+            <li>Fill in the user details:
+                <ul>
+                    <li>First Name</li>
+                    <li>Last Name</li>
+                    <li>Email</li>
+                    <li>Password</li>
+                    <li>Role: Select "Crawler User" for regular users or "Crawler Admin" for administrators</li>
+                </ul>
+            </li>
+            <li>Click <strong>Save</strong></li>
+        </ol>
+        
+        <h3>User Dashboard Customization</h3>
+        <p>You can customize what users see when they log in:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Roles & Permissions</strong></li>
+            <li>Select the "Crawler User" role</li>
+            <li>Go to the <strong>App Access</strong> tab</li>
+            <li>Configure:
+                <ul>
+                    <li>App Access: Enabled</li>
+                    <li>Admin Access: Disabled</li>
+                    <li>Module Navigation: Select only the "Web Crawler" module</li>
+                    <li>Collection Navigation: Select only "crawl_tasks" and "crawl_results"</li>
+                </ul>
+            </li>
+            <li>Save the changes</li>
+        </ol>
+        
+        <h3>Creating a User Management Interface for Admins</h3>
+        <p>For administrators, you can create a custom page to manage crawler users:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Project Settings</strong></li>
+            <li>Scroll down to the "Pages" section</li>
+            <li>Click <strong>Add Page</strong></li>
+            <li>Configure the page:
+                <ul>
+                    <li>Name: "Manage Users"</li>
+                    <li>Icon: "people"</li>
+                    <li>Module: "Web Crawler"</li>
+                    <li>Type: "Component"</li>
+                    <li>Restrict to roles: "Crawler Admin"</li>
+                </ul>
+            </li>
+            <li>Save the page</li>
+        </ol>
+        
+        <p>Create a Vue component for the user management page:</p>
+        <ol>
+            <li>Create a new file in your Directus extensions folder: <code>extensions/modules/web-crawler/manage-users.vue</code></li>
+            <li>Add the following code:</li>
+        </ol>
+        
+        <pre>
+&lt;template&gt;
+  &lt;private-view title="Manage Crawler Users" :breadcrumb="breadcrumb"&gt;
+    &lt;template #headline&gt;Manage users and their crawl activities&lt;/template&gt;
+    
+    &lt;div class="users-container"&gt;
+      &lt;v-table
+        :items="users"
+        :headers="headers"
+        :loading="loading"
+        @click:row="viewUserDetails"
+      &gt;
+        &lt;template #item.role="{ item }"&gt;
+          &lt;v-chip :color="item.role.name === 'Crawler Admin' ? 'var(--primary)' : 'var(--secondary)'"&gt;
+            {{ item.role.name }}
+          &lt;/v-chip&gt;
+        &lt;/template&gt;
+        
+        &lt;template #item.status="{ item }"&gt;
+          &lt;v-chip :color="item.status === 'active' ? 'success' : 'warning'"&gt;
+            {{ item.status }}
+          &lt;/v-chip&gt;
+        &lt;/template&gt;
+        
+        &lt;template #item.last_access="{ item }"&gt;
+          {{ item.last_access ? formatDate(item.last_access) : 'Never' }}
+        &lt;/template&gt;
+      &lt;/v-table&gt;
+      
+      &lt;v-button @click="createUser" class="add-user-btn"&gt;
+        &lt;v-icon name="add" /&gt; Add New User
+      &lt;/v-button&gt;
+    &lt;/div&gt;
+    
+    &lt;v-dialog v-if="selectedUser" v-model="showUserDialog" persistent&gt;
+      &lt;v-card&gt;
+        &lt;v-card-title&gt;User: {{ selectedUser.first_name }} {{ selectedUser.last_name }}&lt;/v-card-title&gt;
+        &lt;v-card-text&gt;
+          &lt;div class="user-details"&gt;
+            &lt;div class="user-info"&gt;
+              &lt;div&gt;&lt;strong&gt;Email:&lt;/strong&gt; {{ selectedUser.email }}&lt;/div&gt;
+              &lt;div&gt;&lt;strong&gt;Role:&lt;/strong&gt; {{ selectedUser.role.name }}&lt;/div&gt;
+              &lt;div&gt;&lt;strong&gt;Status:&lt;/strong&gt; {{ selectedUser.status }}&lt;/div&gt;
+              &lt;div&gt;&lt;strong&gt;Last Access:&lt;/strong&gt; {{ selectedUser.last_access ? formatDate(selectedUser.last_access) : 'Never' }}&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;v-tabs&gt;
+              &lt;v-tab&gt;Crawl Tasks&lt;/v-tab&gt;
+              &lt;v-tab&gt;Crawl Results&lt;/v-tab&gt;
+              &lt;v-tab&gt;Activity Log&lt;/v-tab&gt;
+              
+              &lt;v-tab-item&gt;
+                &lt;div v-if="userTasks.length === 0" class="empty-state"&gt;
+                  No crawl tasks found for this user.
+                &lt;/div&gt;
+                &lt;v-table v-else :items="userTasks" :headers="taskHeaders" :loading="loadingTasks"&gt;
+                  &lt;template #item.status="{ item }"&gt;
+                    &lt;v-chip :color="getStatusColor(item.status)"&gt;{{ item.status }}&lt;/v-chip&gt;
+                  &lt;/template&gt;
+                  
+                  &lt;template #item.created_at="{ item }"&gt;
+                    {{ formatDate(item.created_at) }}
+                  &lt;/template&gt;
+                &lt;/v-table&gt;
+              &lt;/v-tab-item&gt;
+              
+              &lt;v-tab-item&gt;
+                &lt;div v-if="userResults.length === 0" class="empty-state"&gt;
+                  No crawl results found for this user.
+                &lt;/div&gt;
+                &lt;v-table v-else :items="userResults" :headers="resultHeaders" :loading="loadingResults"&gt;
+                  &lt;template #item.created_at="{ item }"&gt;
+                    {{ formatDate(item.created_at) }}
+                  &lt;/template&gt;
+                  
+                  &lt;template #item.pages_crawled="{ item }"&gt;
+                    {{ item.pages_crawled || 'N/A' }}
+                  &lt;/template&gt;
+                  
+                  &lt;template #item.crawl_time="{ item }"&gt;
+                    {{ item.crawl_time ? `${item.crawl_time.toFixed(2)}s` : 'N/A' }}
+                  &lt;/template&gt;
+                &lt;/v-table&gt;
+              &lt;/v-tab-item&gt;
+              
+              &lt;v-tab-item&gt;
+                &lt;div v-if="userActivity.length === 0" class="empty-state"&gt;
+                  No activity recorded for this user.
+                &lt;/div&gt;
+                &lt;div v-else class="activity-timeline"&gt;
+                  &lt;div v-for="activity in userActivity" :key="activity.id" class="activity-item"&gt;
+                    &lt;div class="activity-time"&gt;{{ formatDate(activity.timestamp) }}&lt;/div&gt;
+                    &lt;div class="activity-action"&gt;{{ activity.action }}&lt;/div&gt;
+                    &lt;div class="activity-collection"&gt;{{ activity.collection }}&lt;/div&gt;
+                    &lt;div class="activity-ip"&gt;{{ activity.ip }}&lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/v-tab-item&gt;
+            &lt;/v-tabs&gt;
+          &lt;/div&gt;
+        &lt;/v-card-text&gt;
+        &lt;v-card-actions&gt;
+          &lt;v-button @click="showUserDialog = false"&gt;Close&lt;/v-button&gt;
+          &lt;v-button @click="editUser" :disabled="!selectedUser"&gt;Edit User&lt;/v-button&gt;
+          &lt;v-button @click="resetPassword" :disabled="!selectedUser" secondary&gt;Reset Password&lt;/v-button&gt;
+        &lt;/v-card-actions&gt;
+      &lt;/v-card&gt;
+    &lt;/v-dialog&gt;
+  &lt;/private-view&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      loading: false,
+      users: [],
+      headers: [
+        {
+          text: 'Name',
+          value: 'first_name',
+          align: 'left',
+          sortable: true
+        },
+        {
+          text: 'Email',
+          value: 'email',
+          align: 'left',
+          sortable: true
+        },
+        {
+          text: 'Role',
+          value: 'role',
+          align: 'left',
+          sortable: true
+        },
+        {
+          text: 'Status',
+          value: 'status',
+          align: 'left',
+          sortable: true
+        },
+        {
+          text: 'Last Access',
+          value: 'last_access',
+          align: 'left',
+          sortable: true
+        }
+      ],
+      taskHeaders: [
+        {
+          text: 'URL',
+          value: 'url',
+          align: 'left'
+        },
+        {
+          text: 'Status',
+          value: 'status',
+          align: 'left'
+        },
+        {
+          text: 'Created',
+          value: 'created_at',
+          align: 'left'
+        }
+      ],
+      resultHeaders: [
+        {
+          text: 'URL',
+          value: 'crawl_task.url',
+          align: 'left'
+        },
+        {
+          text: 'Pages',
+          value: 'pages_crawled',
+          align: 'left'
+        },
+        {
+          text: 'Time',
+          value: 'crawl_time',
+          align: 'left'
+        },
+        {
+          text: 'Created',
+          value: 'created_at',
+          align: 'left'
+        }
+      ],
+      selectedUser: null,
+      showUserDialog: false,
+      userTasks: [],
+      userResults: [],
+      userActivity: [],
+      loadingTasks: false,
+      loadingResults: false,
+      loadingActivity: false,
+      breadcrumb: [
+        {
+          name: 'Web Crawler',
+          to: '/web-crawler'
+        }
+      ]
+    };
+  },
+  created() {
+    this.fetchUsers();
+  },
+  methods: {
+    async fetchUsers() {
+      this.loading = true;
+      
+      try {
+        // Get all users with the Crawler User or Crawler Admin role
+        const rolesResponse = await this.$api.get('/roles', {
+          params: {
+            filter: {
+              name: {
+                _in: ['Crawler User', 'Crawler Admin']
+              }
+            }
+          }
+        });
+        
+        const roleIds = rolesResponse.data.data.map(role => role.id);
+        
+        const usersResponse = await this.$api.get('/users', {
+          params: {
+            filter: {
+              role: {
+                _in: roleIds
+              }
+            },
+            fields: ['id', 'first_name', 'last_name', 'email', 'status', 'last_access', 'role.*']
+          }
+        });
+        
+        this.users = usersResponse.data.data;
+      } catch (error) {
+        this.$dialog.error({
+          title: 'Error',
+          text: `Failed to fetch users: ${error.message}`
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+    async viewUserDetails(user) {
+      this.selectedUser = user;
+      this.showUserDialog = true;
+      
+      // Fetch user's crawl tasks
+      this.loadingTasks = true;
+      try {
+        const tasksResponse = await this.$api.get('/items/crawl_tasks', {
+          params: {
+            filter: {
+              user_created: {
+                _eq: user.id
+              }
+            },
+            sort: ['-created_at']
+          }
+        });
+        
+        this.userTasks = tasksResponse.data.data;
+      } catch (error) {
+        console.error('Failed to fetch user tasks:', error);
+      } finally {
+        this.loadingTasks = false;
+      }
+      
+      // Fetch user's crawl results
+      this.loadingResults = true;
+      try {
+        const resultsResponse = await this.$api.get('/items/crawl_results', {
+          params: {
+            filter: {
+              crawl_task: {
+                user_created: {
+                  _eq: user.id
+                }
+              }
+            },
+            fields: ['*', 'crawl_task.url'],
+            sort: ['-created_at']
+          }
+        });
+        
+        this.userResults = resultsResponse.data.data;
+      } catch (error) {
+        console.error('Failed to fetch user results:', error);
+      } finally {
+        this.loadingResults = false;
+      }
+      
+      // Fetch user's activity log
+      this.loadingActivity = true;
+      try {
+        const activityResponse = await this.$api.get('/activity', {
+          params: {
+            filter: {
+              user: {
+                _eq: user.id
+              }
+            },
+            sort: ['-timestamp'],
+            limit: 50
+          }
+        });
+        
+        this.userActivity = activityResponse.data.data;
+      } catch (error) {
+        console.error('Failed to fetch user activity:', error);
+      } finally {
+        this.loadingActivity = false;
+      }
+    },
+    createUser() {
+      this.$router.push('/users/+');
+    },
+    editUser() {
+      if (this.selectedUser) {
+        this.$router.push(`/users/${this.selectedUser.id}`);
+      }
+    },
+    async resetPassword() {
+      if (!this.selectedUser) return;
+      
+      const confirmed = await this.$dialog.confirm({
+        title: 'Reset Password',
+        text: `Are you sure you want to reset the password for ${this.selectedUser.email}?`,
+        confirmText: 'Reset Password'
+      });
+      
+      if (!confirmed) return;
+      
+      try {
+        // Generate a random password
+        const tempPassword = Math.random().toString(36).slice(-8);
+        
+        // Update the user's password
+        await this.$api.patch(`/users/${this.selectedUser.id}`, {
+          password: tempPassword
+        });
+        
+        // Show the temporary password to the admin
+        this.$dialog.info({
+          title: 'Password Reset',
+          text: `Temporary password for ${this.selectedUser.email}: ${tempPassword}`,
+          confirmText: 'Done'
+        });
+      } catch (error) {
+        this.$dialog.error({
+          title: 'Error',
+          text: `Failed to reset password: ${error.message}`
+        });
+      }
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleString();
+    },
+    getStatusColor(status) {
+      switch (status) {
+        case 'completed':
+          return 'success';
+        case 'running':
+          return 'primary';
+        case 'pending':
+          return 'warning';
+        case 'failed':
+          return 'error';
+        default:
+          return 'grey';
+      }
+    }
+  }
+};
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.users-container {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.add-user-btn {
+  position: absolute;
+  top: -60px;
+  right: 0;
+}
+
+.user-details {
+  margin-top: 20px;
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.empty-state {
+  padding: 30px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.activity-timeline {
+  margin-top: 15px;
+}
+
+.activity-item {
+  display: grid;
+  grid-template-columns: 180px 1fr 150px 120px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.activity-time {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.activity-action {
+  font-weight: bold;
+}
+
+.activity-collection {
+  color: #666;
+}
+
+.activity-ip {
+  color: #999;
+  font-size: 0.9em;
+}
+&lt;/style&gt;
+</pre>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 12: Implementing Team-Based Access</div>
+        <p>For larger organizations, you might want to implement team-based access where users can share crawl tasks within their team:</p>
+        
+        <h3>Create a Teams Collection</h3>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Data Model</strong></li>
+            <li>Click <strong>Create Collection</strong></li>
+            <li>Enter "teams" as the collection name</li>
+            <li>Add the following fields:</li>
+        </ol>
+        
+        <table>
+            <tr>
+                <th>Field Name</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>UUID</td>
+                <td>Yes</td>
+                <td>Primary key, auto-generated</td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>Team name</td>
+            </tr>
+            <tr>
+                <td>description</td>
+                <td>Text</td>
+                <td>No</td>
+                <td>Team description</td>
+            </tr>
+            <tr>
+                <td>members</td>
+                <td>M2M</td>
+                <td>No</td>
+                <td>Relation to directus_users</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>Timestamp</td>
+                <td>Yes</td>
+                <td>Auto-generated</td>
+            </tr>
+        </table>
+        
+        <h3>Update the crawl_tasks Collection</h3>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Data Model</strong></li>
+            <li>Select the "crawl_tasks" collection</li>
+            <li>Click <strong>Create Field</strong></li>
+            <li>Configure the field:
+                <ul>
+                    <li>Name: "team"</li>
+                    <li>Type: "M2O"</li>
+                    <li>Related Collection: "teams"</li>
+                    <li>Required: No</li>
+                </ul>
+            </li>
+            <li>Save the field</li>
+        </ol>
+        
+        <h3>Update Permissions for Team-Based Access</h3>
+        <p>For the Crawler User role, update the permissions to allow team-based access:</p>
+        
+        <h4>crawl_tasks - Read Filter:</h4>
+        <pre>
+{
+  "_or": [
+    {
+      "user_created": {
+        "_eq": "$CURRENT_USER"
+      }
+    },
+    {
+      "team": {
+        "members": {
+          "directus_users_id": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      }
+    }
+  ]
+}
+</pre>
+        
+        <h4>crawl_results - Read Filter:</h4>
+        <pre>
+{
+  "_or": [
+    {
+      "crawl_task": {
+        "user_created": {
+          "_eq": "$CURRENT_USER"
+        }
+      }
+    },
+    {
+      "crawl_task": {
+        "team": {
+          "members": {
+            "directus_users_id": {
+              "_eq": "$CURRENT_USER"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+</pre>
+        
+        <div class="note">
+            <strong>Note:</strong> With this setup, users can see crawl tasks and results that either they created or that belong to a team they are a member of.
+        </div>
+    </div>
+    
+    <h2 id="advanced">Advanced Use Cases</h2>
+    <div class="step">
+        <div class="step-number">Step 13: Setting Up Scheduled Crawls</div>
+        <p>You can set up scheduled crawls using Directus Flows:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Flows</strong></li>
+            <li>Click <strong>Create Flow</strong></li>
+            <li>Enter "Scheduled Crawl" as the name</li>
+            <li>Set the status to "Active"</li>
+            <li>Set the trigger to "Schedule"</li>
+            <li>Configure the schedule (e.g., daily at midnight)</li>
+            <li>Add an operation to create a crawl task for each URL you want to crawl regularly</li>
+        </ol>
+        
+        <p>Example script for a scheduled crawl operation:</p>
+        <pre>
+module.exports = async function(data, { services, exceptions }) {
+  const { ItemsService } = services;
+  
+  // List of URLs to crawl regularly
+  const urlsToCrawl = [
+    'https://example.com',
+    'https://example.org',
+    'https://example.net'
+  ];
+  
+  // Create a crawl task for each URL
+  const tasksService = new ItemsService('crawl_tasks', {
+    schema: req.schema,
+    accountability: req.accountability
+  });
+  
+  for (const url of urlsToCrawl) {
+    await tasksService.createOne({
+      url: url,
+      depth: 2,
+      max_pages: 100,
+      extract_images: true,
+      follow_external_links: false,
+      status: 'pending'
+    });
+  }
+  
+  return {
+    message: `Created ${urlsToCrawl.length} scheduled crawl tasks`
+  };
+};
+</pre>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">Step 14: Content Processing and Analysis</div>
+        <p>You can add a flow to process and analyze crawled content:</p>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Flows</strong></li>
+            <li>Create a new flow triggered when a crawl result is created</li>
+            <li>Add operations to process the content (e.g., extract keywords, categorize content)</li>
+        </ol>
+        
+        <p>Example script for content analysis:</p>
+        <pre>
+module.exports = async function(data, { services, exceptions }) {
+  const { ItemsService } = services;
+  
+  const resultId = data.key;
+  const resultData = data.payload;
+  
+  // Skip if no content
+  if (!resultData.content) {
+    return { message: 'No content to analyze' };
+  }
+  
+  // Simple keyword extraction (in a real scenario, use NLP libraries)
+  const keywords = extractKeywords(resultData.content);
+  
+  // Update the result with extracted keywords
+  const resultsService = new ItemsService('crawl_results', {
+    schema: req.schema,
+    accountability: req.accountability
+  });
+  
+  await resultsService.updateOne(resultId, {
+    metadata: {
+      ...resultData.metadata,
+      keywords: keywords
+    }
+  });
+  
+  return {
+    message: 'Content analyzed successfully',
+    keywords: keywords
+  };
+};
+
+// Simple keyword extraction function
+function extractKeywords(text) {
+  // Remove markdown formatting
+  const plainText = text.replace(/[#*_`]/g, '');
+  
+  // Split into words and count occurrences
+  const words = plainText.toLowerCase().split(/\W+/);
+  const wordCounts = {};
+  
+  for (const word of words) {
+    if (word.length > 3 && !commonWords.includes(word)) {
+      wordCounts[word] = (wordCounts[word] || 0) + 1;
+    }
+  }
+  
+  // Sort by count and return top keywords
+  return Object.entries(wordCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(([word, count]) => ({ word, count }));
+}
+
+// Common words to exclude
+const commonWords = ['the', 'and', 'that', 'have', 'for', 'not', 'with', 'you', 'this', 'but'];
+</pre>
+    </div>
+    
+    <h2>User Activity Reporting</h2>
+    <div class="step">
+        <div class="step-number">Step 15: Creating Usage Reports</div>
+        <p>
+            For administrators, it's useful to have reports on how the system is being used. Let's create a reporting dashboard:
+        </p>
+        
+        <h3>Create a Reports Page</h3>
+        <ol>
+            <li>Go to <strong>Settings</strong> > <strong>Project Settings</strong></li>
+            <li>Scroll down to the "Pages" section</li>
+            <li>Click <strong>Add Page</strong></li>
+            <li>Configure the page:
+                <ul>
+                    <li>Name: "Usage Reports"</li>
+                    <li>Icon: "assessment"</li>
+                    <li>Module: "Web Crawler"</li>
+                    <li>Type: "Component"</li>
+                    <li>Restrict to roles: "Crawler Admin"</li>
+                </ul>
+            </li>
+            <li>Save the page</li>
+        </ol>
+        
+        <p>Create a Vue component for the reports page:</p>
+        <ol>
+            <li>Create a new file in your Directus extensions folder: <code>extensions/modules/web-crawler/usage-reports.vue</code></li>
+            <li>Add code for displaying charts and statistics about system usage</li>
+        </ol>
+        
+        <h3>Example Reports to Include</h3>
+        <ul>
+            <li>Crawl tasks per user over time</li>
+            <li>Average crawl time per domain</li>
+            <li>Most frequently crawled domains</li>
+            <li>Success/failure rates of crawls</li>
+            <li>System resource usage during crawls</li>
+            <li>Peak usage times</li>
+        </ul>
+        
+        <div class="note">
+            <strong>Note:</strong> For implementing charts, you can use libraries like Chart.js or D3.js, which can be integrated with Vue components.
+        </div>
+    </div>
+    
+    <h2>Conclusion</h2>
+    <p>
+        You've now successfully integrated the Crawl4AI API with Directus! This integration allows you to:
+    </p>
+    <ul>
+        <li>Trigger web crawls from a user-friendly interface</li>
+        <li>Store and manage crawl results in a structured database</li>
+        <li>View and analyze crawled content, links, and images</li>
+        <li>Set up scheduled crawls for regular content updates</li>
+        <li>Process and analyze crawled content automatically</li>
+    </ul>
+    
+    <p>
+        This integration can be extended further with additional features such as:
+    </p>
+    <ul>
+        <li>Content comparison between crawls to track changes</li>
+        <li>Integration with AI services for content analysis</li>
+        <li>Custom dashboards for crawl statistics</li>
+        <li>Automated content publishing based on crawl results</li>
+        <li>Advanced team collaboration features</li>
+        <li>Role-based crawl configurations</li>
+        <li>Usage quotas and rate limiting per user or team</li>
+        <li>Integration with notification systems</li>
+    </ul>
+    
+    <div class="note">
+        <strong>Note:</strong> Remember to secure your Directus instance and API endpoints appropriately, 
+        especially if you're crawling sensitive information or deploying in a production environment.
+        With multiple users accessing the system, it's even more important to implement proper authentication,
+        authorization, and data isolation.
+    </div>
+    
+    <footer>
+        <p>Crawl4AI + Directus Integration Tutorial &copy; 2025</p>
+    </footer>
+</body>
+</html>

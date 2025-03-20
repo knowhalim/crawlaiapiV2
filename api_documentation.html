@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crawl4AI API Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        code {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            padding: 2px 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            overflow: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            line-height: 1.4;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .endpoint {
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get {
+            background-color: #61affe;
+            color: white;
+        }
+        .post {
+            background-color: #49cc90;
+            color: white;
+        }
+        .parameter {
+            margin-bottom: 10px;
+        }
+        .parameter-name {
+            font-weight: bold;
+        }
+        .parameter-type {
+            color: #6c7a89;
+            font-style: italic;
+        }
+        .parameter-default {
+            color: #95a5a6;
+        }
+        .response {
+            background-color: #f9f9f9;
+            border-left: 4px solid #27ae60;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .nav {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #3498db;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .example {
+            background-color: #f0f7fb;
+            border-left: 4px solid #5bc0de;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crawl4AI API Documentation</h1>
+    
+    <div class="nav">
+        <a href="#overview">Overview</a>
+        <a href="#endpoints">Endpoints</a>
+        <a href="#crawl">Crawl Endpoint</a>
+        <a href="#status">Status Endpoint</a>
+        <a href="#tasks">Tasks Endpoint</a>
+        <a href="#cancel">Cancel Endpoint</a>
+        <a href="#batch">Batch Endpoint</a>
+        <a href="#health">Health Endpoint</a>
+        <a href="#examples">Examples</a>
+    </div>
+    
+    <h2 id="overview">Overview</h2>
+    <p>
+        The Crawl4AI API provides a powerful interface for web crawling and data extraction. 
+        It supports deep crawling, link extraction, domain filtering, media extraction, and more.
+        The API can be used synchronously for immediate results or asynchronously for larger crawling tasks.
+    </p>
+    
+    <h2 id="endpoints">Endpoints</h2>
+    <table>
+        <tr>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>/crawl</td>
+            <td>GET, POST</td>
+            <td>Initiate a web crawl</td>
+        </tr>
+        <tr>
+            <td>/status/&lt;task_id&gt;</td>
+            <td>GET</td>
+            <td>Check the status of a crawl task</td>
+        </tr>
+        <tr>
+            <td>/tasks</td>
+            <td>GET</td>
+            <td>List all active and completed crawl tasks</td>
+        </tr>
+        <tr>
+            <td>/cancel/&lt;task_id&gt;</td>
+            <td>POST</td>
+            <td>Cancel an ongoing crawl task</td>
+        </tr>
+        <tr>
+            <td>/batch</td>
+            <td>POST</td>
+            <td>Start multiple crawl tasks in a single request</td>
+        </tr>
+        <tr>
+            <td>/batch/&lt;batch_id&gt;</td>
+            <td>GET</td>
+            <td>Check the status of a batch of crawl tasks</td>
+        </tr>
+        <tr>
+            <td>/health</td>
+            <td>GET</td>
+            <td>Check the health status of the API</td>
+        </tr>
+    </table>
+    
+    <h2 id="crawl">Crawl Endpoint</h2>
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/crawl</code>
+        <p>Initiate a basic web crawl with minimal configuration.</p>
+        
+        <h4>Query Parameters:</h4>
+        <div class="parameter">
+            <span class="parameter-name">url</span> <span class="parameter-type">(string, required)</span>
+            <p>The URL to crawl</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">depth</span> <span class="parameter-type">(integer)</span> <span class="parameter-default">Default: 1</span>
+            <p>The depth of the crawl (how many links to follow)</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">synchronous</span> <span class="parameter-type">(boolean)</span> <span class="parameter-default">Default: false</span>
+            <p>If "true", wait for the crawl to complete and return results immediately</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">callback_url</span> <span class="parameter-type">(string)</span>
+            <p>URL to send results to when the crawl completes</p>
+        </div>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/crawl</code>
+        <p>Initiate a web crawl with advanced configuration options.</p>
+        
+        <h4>Request Body (JSON):</h4>
+        <div class="parameter">
+            <span class="parameter-name">url</span> <span class="parameter-type">(string, required)</span>
+            <p>The URL to crawl</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">depth</span> <span class="parameter-type">(integer)</span> <span class="parameter-default">Default: 1</span>
+            <p>The depth of the crawl (how many links to follow)</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">max_pages</span> <span class="parameter-type">(integer)</span> <span class="parameter-default">Default: 100</span>
+            <p>Maximum number of pages to crawl</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">excluded_domains</span> <span class="parameter-type">(array of strings)</span>
+            <p>Domains to exclude from crawling</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">include_only_domains</span> <span class="parameter-type">(array of strings)</span>
+            <p>Only crawl these domains (exclusive filter)</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">extract_images</span> <span class="parameter-type">(boolean)</span> <span class="parameter-default">Default: false</span>
+            <p>Whether to extract images from crawled pages</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">css_selectors</span> <span class="parameter-type">(object or array)</span>
+            <p>CSS selectors to extract specific content from pages</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">follow_external_links</span> <span class="parameter-type">(boolean)</span> <span class="parameter-default">Default: false</span>
+            <p>Whether to follow links to external domains</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">page_interactions</span> <span class="parameter-type">(array of objects)</span>
+            <p>Interactions to perform on pages (click, scroll, type, etc.)</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">wait_for_selectors</span> <span class="parameter-type">(array of strings)</span>
+            <p>CSS selectors to wait for before considering a page loaded</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">extract_metadata</span> <span class="parameter-type">(boolean)</span> <span class="parameter-default">Default: false</span>
+            <p>Whether to extract metadata from pages</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">media_download</span> <span class="parameter-type">(boolean)</span> <span class="parameter-default">Default: false</span>
+            <p>Whether to download media files</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">media_types</span> <span class="parameter-type">(array of strings)</span> <span class="parameter-default">Default: ["image"]</span>
+            <p>Types of media to download</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">user_agent</span> <span class="parameter-type">(string)</span>
+            <p>Custom user agent string for requests</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">timeout</span> <span class="parameter-type">(integer)</span> <span class="parameter-default">Default: 30</span>
+            <p>Request timeout in seconds</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">rate_limit</span> <span class="parameter-type">(float)</span> <span class="parameter-default">Default: 0</span>
+            <p>Maximum requests per second (0 = no limit)</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">synchronous</span> <span class="parameter-type">(boolean)</span> <span class="parameter-default">Default: false</span>
+            <p>If true, wait for the crawl to complete and return results immediately</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">callback_url</span> <span class="parameter-type">(string)</span>
+            <p>URL to send results to when the crawl completes</p>
+        </div>
+        
+        <h4>Response (Synchronous):</h4>
+        <pre>{
+  "url": "https://example.com",
+  "depth": 1,
+  "content": "# Example.com\n\nThis domain is for use in illustrative examples...",
+  "crawl_time": 1.23,
+  "pages_crawled": 5,
+  "links": {
+    "internal": [
+      "https://example.com/about", 
+      "https://example.com/contact",
+      "https://example.com/terms"
+    ],
+    "external": [
+      "https://iana.org",
+      "https://www.w3.org/standards/"
+    ],
+    "domains": {
+      "example.com": 3,
+      "iana.org": 1,
+      "www.w3.org": 1
+    },
+    "total_count": 5
+  },
+  "images": [
+    {
+      "url": "https://example.com/logo.png",
+      "alt": "Example Logo",
+      "width": "200",
+      "height": "100"
+    },
+    {
+      "url": "https://example.com/banner.jpg",
+      "alt": "Welcome Banner",
+      "width": "800",
+      "height": "300"
+    }
+  ],
+  "metadata": {
+    "title": "Example Domain",
+    "description": "This domain is for use in illustrative examples",
+    "keywords": "example, domain, test",
+    "author": "Internet Assigned Numbers Authority"
+  }
+}</pre>
+        
+        <h4>Response (Asynchronous):</h4>
+        <pre>{
+  "task_id": "task_f8e7d6c5-b4a3-9210-8765-4321fedcba98",
+  "status": "running",
+  "message": "Crawl started asynchronously"
+}</pre>
+    </div>
+    
+    <h2 id="status">Status Endpoint</h2>
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/status/&lt;task_id&gt;</code>
+        <p>Check the status of a crawl task.</p>
+        
+        <h4>Path Parameters:</h4>
+        <div class="parameter">
+            <span class="parameter-name">task_id</span> <span class="parameter-type">(string, required)</span>
+            <p>The ID of the task to check</p>
+        </div>
+        
+        <h4>Response:</h4>
+        <pre>{
+  "task_id": "task_f8e7d6c5-b4a3-9210-8765-4321fedcba98",
+  "url": "https://example.com",
+  "status": "completed",
+  "result": {
+    "url": "https://example.com",
+    "depth": 2,
+    "content": "# Example.com\n\nThis domain is for use in illustrative examples...",
+    "crawl_time": 1.23,
+    "pages_crawled": 5,
+    "links": {
+      "internal": [
+        "https://example.com/about", 
+        "https://example.com/contact",
+        "https://example.com/terms",
+        "https://example.com/privacy"
+      ],
+      "external": [
+        "https://iana.org",
+        "https://www.w3.org/standards/"
+      ],
+      "domains": {
+        "example.com": 4,
+        "iana.org": 1,
+        "www.w3.org": 1
+      },
+      "total_count": 6
+    },
+    "images": [
+      {
+        "url": "https://example.com/logo.png",
+        "alt": "Example Logo",
+        "width": "200",
+        "height": "100"
+      },
+      {
+        "url": "https://example.com/banner.jpg",
+        "alt": "Welcome Banner",
+        "width": "800",
+        "height": "300"
+      }
+    ],
+    "metadata": {
+      "title": "Example Domain",
+      "description": "This domain is for use in illustrative examples",
+      "keywords": "example, domain, test",
+      "author": "Internet Assigned Numbers Authority"
+    }
+  }
+}</pre>
+    </div>
+    
+    <h2 id="tasks">Tasks Endpoint</h2>
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/tasks</code>
+        <p>List all active and recently completed crawl tasks.</p>
+        
+        <h4>Query Parameters:</h4>
+        <div class="parameter">
+            <span class="parameter-name">status</span> <span class="parameter-type">(string)</span>
+            <p>Filter tasks by status (running, completed, failed, cancelled)</p>
+        </div>
+        
+        <h4>Response:</h4>
+        <pre>{
+  "tasks": {
+    "task_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890": {
+      "url": "https://example.com",
+      "status": "completed",
+      "created_at": 1647123456,
+      "completed_at": 1647123789
+    },
+    "task_b2c3d4e5-f6a7-8901-b2c3-d4e5f6a78901": {
+      "url": "https://example.org",
+      "status": "running",
+      "created_at": 1647123789,
+      "completed_at": null
+    },
+    "task_c3d4e5f6-a7b8-9012-c3d4-e5f6a7b89012": {
+      "url": "https://example.net",
+      "status": "failed",
+      "created_at": 1647123400,
+      "completed_at": 1647123500
+    }
+  },
+  "count": 3
+}</pre>
+    </div>
+    
+    <h2 id="cancel">Cancel Endpoint</h2>
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/cancel/&lt;task_id&gt;</code>
+        <p>Cancel an ongoing crawl task.</p>
+        
+        <h4>Path Parameters:</h4>
+        <div class="parameter">
+            <span class="parameter-name">task_id</span> <span class="parameter-type">(string, required)</span>
+            <p>The ID of the task to cancel</p>
+        </div>
+        
+        <h4>Response:</h4>
+        <pre>{
+  "task_id": "task_f8e7d6c5-b4a3-9210-8765-4321fedcba98",
+  "status": "cancelled",
+  "message": "Task cancellation requested"
+}</pre>
+    </div>
+    
+    <h2 id="batch">Batch Endpoint</h2>
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/batch</code>
+        <p>Start multiple crawl tasks in a single request.</p>
+        
+        <h4>Request Body (JSON):</h4>
+        <div class="parameter">
+            <span class="parameter-name">urls</span> <span class="parameter-type">(array of strings, required)</span>
+            <p>List of URLs to crawl</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">config</span> <span class="parameter-type">(object)</span>
+            <p>Configuration to apply to all crawls (same parameters as /crawl)</p>
+        </div>
+        <div class="parameter">
+            <span class="parameter-name">callback_url</span> <span class="parameter-type">(string)</span>
+            <p>URL to send results to when all crawls complete</p>
+        </div>
+        
+        <h4>Response:</h4>
+        <pre>{
+  "batch_id": "batch_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
+  "task_ids": [
+    "task_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
+    "task_b2c3d4e5-f6a7-8901-b2c3-d4e5f6a78901",
+    "task_c3d4e5f6-a7b8-9012-c3d4-e5f6a7b89012"
+  ],
+  "status": "running",
+  "message": "Started 3 crawl tasks"
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/batch/&lt;batch_id&gt;</code>
+        <p>Check the status of a batch of crawl tasks.</p>
+        
+        <h4>Path Parameters:</h4>
+        <div class="parameter">
+            <span class="parameter-name">batch_id</span> <span class="parameter-type">(string, required)</span>
+            <p>The ID of the batch to check</p>
+        </div>
+        
+        <h4>Response:</h4>
+        <pre>{
+  "batch_id": "batch_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
+  "tasks": {
+    "task_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890": {
+      "url": "https://example.com",
+      "status": "completed",
+      "result": {
+        "url": "https://example.com",
+        "depth": 1,
+        "content": "# Example.com\n\nThis domain is for use in illustrative examples...",
+        "crawl_time": 0.87,
+        "pages_crawled": 1,
+        "links": {
+          "internal": ["https://example.com/about"],
+          "external": ["https://iana.org"],
+          "domains": {
+            "example.com": 1,
+            "iana.org": 1
+          },
+          "total_count": 2
+        },
+        "images": [
+          {
+            "url": "https://example.com/logo.png",
+            "alt": "Example Logo",
+            "width": "200",
+            "height": "100"
+          }
+        ]
+      }
+    },
+    "task_b2c3d4e5-f6a7-8901-b2c3-d4e5f6a78901": {
+      "url": "https://example.org",
+      "status": "running"
+    },
+    "task_c3d4e5f6-a7b8-9012-c3d4-e5f6a7b89012": {
+      "url": "https://example.net",
+      "status": "failed",
+      "error": "Connection timeout after 30 seconds"
+    }
+  },
+  "total": 3,
+  "completed": 2,
+  "status": "running"
+}</pre>
+    </div>
+    
+    <h2 id="health">Health Endpoint</h2>
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/health</code>
+        <p>Check the health status of the API.</p>
+        
+        <h4>Response:</h4>
+        <pre>{
+  "status": "healthy",
+  "stats": {
+    "active_tasks": 2,
+    "completed_tasks": 10,
+    "failed_tasks": 1,
+    "cancelled_tasks": 2,
+    "cached_results": 8,
+    "uptime": 3600,
+    "memory_usage_mb": 128.5,
+    "cpu_usage_percent": 12.3,
+    "disk_usage_percent": 45.2,
+    "queue_size": 0,
+    "average_crawl_time": 2.34
+  }
+}</pre>
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    
+    <h3>Basic Crawl (GET)</h3>
+    <div class="example">
+        <p>Request:</p>
+        <pre>GET /crawl?url=https://example.com&depth=1</pre>
+        
+        <p>Response:</p>
+        <pre>{
+  "task_id": "task_f8e7d6c5-b4a3-9210-8765-4321fedcba98",
+  "status": "running",
+  "message": "Crawl started asynchronously"
+}</pre>
+    </div>
+    
+    <h3>Advanced Crawl (POST)</h3>
+    <div class="example">
+        <p>Request:</p>
+        <pre>POST /crawl
+Content-Type: application/json
+
+{
+  "url": "https://example.com",
+  "depth": 2,
+  "max_pages": 50,
+  "extract_images": true,
+  "extract_metadata": true,
+  "excluded_domains": ["facebook.com", "twitter.com", "instagram.com"],
+  "follow_external_links": false,
+  "css_selectors": {
+    "title": "h1",
+    "content": "article",
+    "links": "a.important-link",
+    "pricing": ".pricing-table"
+  },
+  "page_interactions": [
+    {
+      "type": "click",
+      "selector": ".load-more-button"
+    },
+    {
+      "type": "scroll",
+      "value": "1000"
+    }
+  ],
+  "wait_for_selectors": [".dynamic-content", "#loaded-data"],
+  "user_agent": "Crawl4AI/1.0 (+https://example.com/bot)",
+  "timeout": 45,
+  "rate_limit": 2.5,
+  "callback_url": "https://your-server.com/webhook"
+}</pre>
+        
+        <p>Response:</p>
+        <pre>{
+  "task_id": "task_f8e7d6c5-b4a3-9210-8765-4321fedcba98",
+  "status": "running",
+  "message": "Crawl started asynchronously"
+}</pre>
+    </div>
+    
+    <h3>Batch Crawl</h3>
+    <div class="example">
+        <p>Request:</p>
+        <pre>POST /batch
+Content-Type: application/json
+
+{
+  "urls": [
+    "https://example.com",
+    "https://example.org",
+    "https://example.net",
+    "https://example.edu",
+    "https://example.io"
+  ],
+  "config": {
+    "depth": 1,
+    "extract_images": true,
+    "extract_metadata": true,
+    "max_pages": 20,
+    "timeout": 30,
+    "rate_limit": 1.0,
+    "css_selectors": {
+      "title": "h1",
+      "description": "meta[name='description']",
+      "content": "main"
+    }
+  },
+  "callback_url": "https://your-server.com/webhook"
+}</pre>
+        
+        <p>Response:</p>
+        <pre>{
+  "batch_id": "batch_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
+  "task_ids": [
+    "task_a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
+    "task_b2c3d4e5-f6a7-8901-b2c3-d4e5f6a78901",
+    "task_c3d4e5f6-a7b8-9012-c3d4-e5f6a7b89012",
+    "task_d4e5f6a7-b8c9-0123-d4e5-f6a7b8c90123",
+    "task_e5f6a7b8-c9d0-1234-e5f6-a7b8c9d01234"
+  ],
+  "status": "running",
+  "message": "Started 5 crawl tasks"
+}</pre>
+    </div>
+    
+    <h3>Check Task Status</h3>
+    <div class="example">
+        <p>Request:</p>
+        <pre>GET /status/task_f8e7d6c5-b4a3-9210-8765-4321fedcba98</pre>
+        
+        <p>Response:</p>
+        <pre>{
+  "task_id": "task_f8e7d6c5-b4a3-9210-8765-4321fedcba98",
+  "url": "https://example.com",
+  "status": "completed",
+  "result": {
+    "url": "https://example.com",
+    "depth": 2,
+    "content": "# Example.com\n\nThis domain is for use in illustrative examples...",
+    "crawl_time": 1.23,
+    "pages_crawled": 5,
+    "links": {
+      "internal": [
+        "https://example.com/about", 
+        "https://example.com/contact",
+        "https://example.com/terms",
+        "https://example.com/privacy"
+      ],
+      "external": [
+        "https://iana.org",
+        "https://www.w3.org/standards/"
+      ],
+      "domains": {
+        "example.com": 4,
+        "iana.org": 1,
+        "www.w3.org": 1
+      },
+      "total_count": 6
+    },
+    "images": [
+      {
+        "url": "https://example.com/logo.png",
+        "alt": "Example Logo",
+        "width": "200",
+        "height": "100"
+      },
+      {
+        "url": "https://example.com/banner.jpg",
+        "alt": "Welcome Banner",
+        "width": "800",
+        "height": "300"
+      }
+    ],
+    "metadata": {
+      "title": "Example Domain",
+      "description": "This domain is for use in illustrative examples",
+      "keywords": "example, domain, test",
+      "author": "Internet Assigned Numbers Authority"
+    }
+  }
+}</pre>
+    </div>
+    
+    <footer>
+        <p>Crawl4AI API Documentation &copy; 2025</p>
+    </footer>
+</body>
+</html>
